@@ -12,10 +12,10 @@ module.exports = class extends Generator {
 
     const prompts = [
       {
-        type: 'confirm',
-        name: 'someAnswer',
-        message: 'Would you like to enable this option?',
-        default: true
+        type: 'input',
+        name: 'sourceImage',
+        message: 'Image to use for FROM instruction',
+        default: 'ubuntu'
       }
     ];
 
@@ -25,14 +25,9 @@ module.exports = class extends Generator {
     });
   }
 
-  writing() {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
-    );
-  }
-
-  install() {
-    this.installDependencies();
+  default() {
+    this.composeWith(require.resolve('../dockerfile'), {
+      sourceImage: this.props.sourceImage
+    });
   }
 };
